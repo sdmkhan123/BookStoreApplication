@@ -22,6 +22,5 @@ Create procedure SignUpUsers
 )   
 as
 Begin
-Insert into User_SignUp_Table (FullName,EmailId,Password, MobileNum)
-Values (@FullName,@EmailId,@Password, @MobileNum)
+Insert into User_SignUp_Table Values (@FullName,@EmailId,@Password, @MobileNum)
 End
