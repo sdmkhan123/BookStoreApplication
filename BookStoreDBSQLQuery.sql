@@ -1,0 +1,2 @@
+Create DataBase BookStoreDB
+Use BookStoreDB
