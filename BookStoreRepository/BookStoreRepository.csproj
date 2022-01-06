@@ -6,7 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookStoreModels\BookStoreModels.csproj" />
   </ItemGroup>
 
 </Project>
