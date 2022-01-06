@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Iinterface\" />
+    <ProjectReference Include="..\BookStoreRepository\BookStoreRepository.csproj" />
   </ItemGroup>
 
 </Project>
