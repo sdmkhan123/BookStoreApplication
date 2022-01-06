@@ -2,9 +2,6 @@
 using BookStoreModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookStoreApp.Controller
 {
@@ -22,14 +19,14 @@ namespace BookStoreApp.Controller
         {
             try
             {
-                string result = this.manager.UserSignUp(signUpModel);
-                if (result.Equals("Registration is successful"))
+                int result = this.manager.UserSignUp(signUpModel);
+                if (result !=0)
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Registration is successful" });
                 }
                 else
                 {
-                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Registration is Unsuccessful" });
                 }
             }
             catch (Exception ex)
