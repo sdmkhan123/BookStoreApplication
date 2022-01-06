@@ -6,7 +6,7 @@ Use BookStoreDB
 Create Table User_SignUp_Table(
 UserId int IDENTITY(1,1) Primary Key NOT NULL,
 FullName varchar(20) NOT NULL,
-EmailId varchar(50) NOT NULL,
+EmailId varchar(50) NOT NULL Unique,
 Password varchar(20) NOT NULL,
 MobileNum bigint NOT NULL
 )
@@ -22,5 +22,10 @@ Create procedure SignUpUsers
 )   
 as
 Begin
-Insert into User_SignUp_Table Values (@FullName,@EmailId,@Password, @MobileNum)
+BEGIN TRY
+	Insert into User_SignUp_Table Values (@FullName,@EmailId,@Password, @MobileNum)
+END TRY
+BEGIN CATCH
+	Select ERROR_MESSAGE() AS ErrorMessage;
+END CATCH
 End
