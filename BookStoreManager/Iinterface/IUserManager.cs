@@ -4,6 +4,6 @@ namespace BookStoreManager.Interface
 {
     public interface IUserManager
     {
-        string UserSignUp(SignUpModel signUpModel);
+        int UserSignUp(SignUpModel signUpModel);
     }
 }

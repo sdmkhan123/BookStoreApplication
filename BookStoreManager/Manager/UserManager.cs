@@ -2,8 +2,6 @@
 using BookStoreModels;
 using BookStoreRepository.Interface;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BookStoreManager.Manager
 {
@@ -14,7 +12,7 @@ namespace BookStoreManager.Manager
         {
             this.repository = repository;
         }
-        public string UserSignUp(SignUpModel signUpModel)
+        public int UserSignUp(SignUpModel signUpModel)
         {
             try
             {
