@@ -8,15 +8,14 @@ using System.Text;
 
 namespace BookStoreRepository.Repository
 {
-
     public class UserRepository : IUserRepository
     {
-        private readonly IConfiguration config;
+        private readonly IConfiguration configuration;
         public string connectionString { get; set; }  = "BookStoreDbConnectionString";
 
         public UserRepository(IConfiguration configuration)
         {
-            this.config = configuration;
+            this.configuration = configuration;
         }
 
         public string EncryptPassword(string password)
@@ -31,7 +30,7 @@ namespace BookStoreRepository.Repository
             {
                 if(signUpModel != null)
                 {
-                    string ConnectionStrings = config.GetConnectionString(connectionString);
+                    string ConnectionStrings = configuration.GetConnectionString(connectionString);
                     using (SqlConnection con = new SqlConnection(ConnectionStrings))
                     {
                         SqlCommand sqlCommand = new SqlCommand("SignUpUsers", con);
@@ -50,6 +49,36 @@ namespace BookStoreRepository.Repository
                 {
                     return 0;
                 }
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new ArgumentNullException(e.Message);
+            }
+        }
+        public int Login(LoginModel loginModel)
+        {
+            try
+            {
+                int result = 0;
+                if (loginModel != null)
+                {
+                    string ConnectionStrings = configuration.GetConnectionString(connectionString);
+                    SqlDataReader dr;
+                    using (SqlConnection sqlConnection = new SqlConnection(ConnectionStrings))
+                    {
+                        SqlCommand sqlCommand = new SqlCommand("spForLogin", sqlConnection);
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@EmailId", loginModel.EmailId);
+                        sqlCommand.Parameters.AddWithValue("@Password", EncryptPassword(loginModel.Password));
+                        sqlConnection.Open();
+                        dr = sqlCommand.ExecuteReader();
+                        if (dr.Read())
+                        {
+                            result = 1;
+                        }
+                    }
+                }
+                return result;
             }
             catch (ArgumentNullException e)
             {
