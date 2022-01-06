@@ -15,7 +15,7 @@ namespace BookStoreApp.Controller
         }
         [HttpPost]
         [Route("api/signup")]
-        public IActionResult Register([FromBody] SignUpModel signUpModel)
+        public IActionResult UserSignUp([FromBody] SignUpModel signUpModel)
         {
             try
             {
@@ -27,6 +27,27 @@ namespace BookStoreApp.Controller
                 else
                 {
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Registration is Unsuccessful" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("api/login")]
+        public IActionResult Login(LoginModel loginModel)
+        {
+            try
+            {
+                int result = this.manager.Login(loginModel);
+                if (result != 0)
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Login is successful" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Login is Unsuccessful" });
                 }
             }
             catch (Exception ex)
