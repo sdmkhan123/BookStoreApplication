@@ -29,3 +29,22 @@ BEGIN CATCH
 	Select ERROR_MESSAGE() AS ErrorMessage;
 END CATCH
 End
+--===================================================================================
+-- Creating a stored procedure for login
+--===================================================================================
+Create procedure spForLogin
+(
+@EmailId VARCHAR(50),
+@Password VARCHAR(20)
+)   
+as
+Begin
+	Begin Try
+	SELECT EmailId, Password
+	FROM User_SignUp_Table
+	WHERE EmailId= @EmailId AND Password=@Password
+	End Try
+	BEGIN CATCH
+	Select ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+End
