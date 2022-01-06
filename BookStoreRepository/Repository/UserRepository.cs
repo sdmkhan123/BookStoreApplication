@@ -2,27 +2,30 @@
 using BookStoreRepository.Interface;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
 namespace BookStoreRepository.Repository
 {
+
     public class UserRepository : IUserRepository
     {
         private readonly IConfiguration config;
         public string connectionString { get; set; }  = "BookStoreDbConnectionString";
+
         public UserRepository(IConfiguration configuration)
         {
             this.config = configuration;
         }
+
         public string EncryptPassword(string password)
         {
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             return Convert.ToBase64String(passwordBytes);
         }
-        public string UserSignUp(SignUpModel signUpModel)
+
+        public int UserSignUp(SignUpModel signUpModel)
         {
             try
             {
@@ -40,16 +43,12 @@ namespace BookStoreRepository.Repository
                         con.Open();
                         int result = sqlCommand.ExecuteNonQuery();
                         con.Close();
-                        if (result != 0)
-                        {
-                            return "Registration is successful"; ;
-                        }
-                        return "Registration is Unsuccessful";
+                        return result;
                     }
                 }
                 else
                 {
-                    return "Registration is unsuccessful";
+                    return 0;
                 }
             }
             catch (ArgumentNullException e)

@@ -4,6 +4,6 @@ namespace BookStoreRepository.Interface
 {
     public interface IUserRepository
     {
-        string UserSignUp(SignUpModel signUpModel);
+        int UserSignUp(SignUpModel signUpModel);
     }
 }
