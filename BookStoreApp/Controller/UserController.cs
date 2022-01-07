@@ -41,13 +41,17 @@ namespace BookStoreApp.Controller
             try
             {
                 int result = this.manager.Login(loginModel);
-                if (result != 0)
+                if (result == 2)
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = "Login is successful" });
                 }
-                else
+                else if (result == 1)
                 {
-                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Login is Unsuccessful" });
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Password is incorrect and Login is Unsuccessful" });
+                }
+                else 
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Email is incorrect and Login is Unsuccessful" });
                 }
             }
             catch (Exception ex)
