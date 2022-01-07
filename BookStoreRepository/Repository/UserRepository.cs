@@ -104,11 +104,8 @@ namespace BookStoreRepository.Repository
                         sqlCommand.Parameters.AddWithValue("@EmailId", resetPasswordModel.EmailId);
                         sqlCommand.Parameters.AddWithValue("@NewPassword", EncryptPassword(resetPasswordModel.NewPassword));
                         sqlConnection.Open();
-                        SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                        if (sqlDataReader.Read())
-                        {
-                            return 1;
-                        }
+                        int result = sqlCommand.ExecuteNonQuery();
+                        return result;
                     }
                 }
                 return 0;
