@@ -59,26 +59,31 @@ namespace BookStoreRepository.Repository
         {
             try
             {
-                int result = 0;
                 if (loginModel != null)
                 {
                     string ConnectionStrings = configuration.GetConnectionString(connectionString);
-                    SqlDataReader dr;
                     using (SqlConnection sqlConnection = new SqlConnection(ConnectionStrings))
                     {
                         SqlCommand sqlCommand = new SqlCommand("spForLogin", sqlConnection);
                         sqlCommand.CommandType = CommandType.StoredProcedure;
                         sqlCommand.Parameters.AddWithValue("@EmailId", loginModel.EmailId);
                         sqlCommand.Parameters.AddWithValue("@Password", EncryptPassword(loginModel.Password));
+                        sqlCommand.Parameters.Add("@User", SqlDbType.Int).Direction = ParameterDirection.Output;
                         sqlConnection.Open();
-                        dr = sqlCommand.ExecuteReader();
-                        if (dr.Read())
+                        sqlCommand.ExecuteNonQuery();
+                        int UserValue = (int)sqlCommand.Parameters["@user"].Value;
+                        if(UserValue == 2)
                         {
-                            result = 1;
+                            return 2;
                         }
+                        else if(UserValue == 1)
+                        {
+                            return 1;
+                        }
+                        return 0;
                     }
                 }
-                return result;
+                return -1;
             }
             catch (ArgumentNullException e)
             {
