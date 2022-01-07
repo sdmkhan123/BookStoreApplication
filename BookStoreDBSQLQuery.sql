@@ -75,9 +75,6 @@ Begin
 		Update User_SignUp_Table
 		set Password=@NewPassword
 		where EmailId=@EmailId
-		SELECT EmailId, Password
-		FROM User_SignUp_Table WHERE
-		EmailId= @EmailId and Password=@NewPassword
 	End Try
 	BEGIN CATCH
 		Select ERROR_MESSAGE() AS ErrorMessage;
