@@ -35,14 +35,27 @@ End
 Create procedure spForLogin
 (
 @EmailId VARCHAR(50),
-@Password VARCHAR(20)
-)   
+@Password VARCHAR(20),
+@User int = Null OUTPUT
+)
 as
 Begin
 	Begin Try
-	SELECT EmailId, Password
-	FROM User_SignUp_Table
-	WHERE EmailId= @EmailId AND Password=@Password
+		IF EXISTS(SELECT * FROM User_SignUp_Table WHERE EmailId=@EmailId)
+		BEGIN
+			IF EXISTS(SELECT * FROM User_SignUp_Table WHERE EmailId=@EmailId AND Password=@Password)
+			BEGIN
+				SET @User = 2;
+			END
+			ELSE
+			BEGIN
+				SET @User = 1;
+			END
+		END
+		ELSE
+		BEGIN
+			SET @User = 0;
+		END
 	End Try
 	BEGIN CATCH
 	Select ERROR_MESSAGE() AS ErrorMessage;
