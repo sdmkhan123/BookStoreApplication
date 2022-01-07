@@ -61,3 +61,25 @@ Begin
 	Select ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 End
+--===================================================================================
+-- Creating a stored procedure for password reset
+--===================================================================================
+Create procedure spForResetPassword
+(       
+    @EmailId VARCHAR(50),
+    @NewPassword VARCHAR(20)
+)   
+as
+Begin
+	Begin Try
+		Update User_SignUp_Table
+		set Password=@NewPassword
+		where EmailId=@EmailId
+		SELECT EmailId, Password
+		FROM User_SignUp_Table WHERE
+		EmailId= @EmailId and Password=@NewPassword
+	End Try
+	BEGIN CATCH
+		Select ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+End
