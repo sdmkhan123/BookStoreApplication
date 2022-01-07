@@ -6,5 +6,6 @@ namespace BookStoreManager.Interface
     {
         int UserSignUp(SignUpModel signUpModel);
         int Login(LoginModel loginModel);
+        int ResetPassword(ResetPasswordModel resetPasswordModel);
     }
 }

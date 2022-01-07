@@ -90,5 +90,33 @@ namespace BookStoreRepository.Repository
                 throw new ArgumentNullException(e.Message);
             }
         }
+        public int ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            try
+            {
+                if (resetPasswordModel.EmailId != null)
+                {
+                    string ConnectionStrings = configuration.GetConnectionString(connectionString);
+                    using (SqlConnection sqlConnection = new SqlConnection(ConnectionStrings))
+                    {
+                        SqlCommand sqlCommand = new SqlCommand("spForResetPassword", sqlConnection);
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@EmailId", resetPasswordModel.EmailId);
+                        sqlCommand.Parameters.AddWithValue("@NewPassword", EncryptPassword(resetPasswordModel.NewPassword));
+                        sqlConnection.Open();
+                        SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                        if (sqlDataReader.Read())
+                        {
+                            return 1;
+                        }
+                    }
+                }
+                return 0;
+            }
+            catch (ArgumentException e)
+            {
+                throw new ArgumentNullException(e.Message);
+            }
+        }
     }
 }
