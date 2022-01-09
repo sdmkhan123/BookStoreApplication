@@ -2,6 +2,7 @@
 using BookStoreModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace BookStoreApp.Controller
 {
@@ -15,11 +16,11 @@ namespace BookStoreApp.Controller
         }
         [HttpPost]
         [Route("api/signup")]
-        public IActionResult UserSignUp([FromBody] SignUpModel signUpModel)
+        public async Task<IActionResult> UserSignUp([FromBody] SignUpModel signUpModel)
         {
             try
             {
-                int result = this.manager.UserSignUp(signUpModel);
+                int result = await this.manager.UserSignUp(signUpModel);
                 if (result !=0)
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = "Registration is successful" });
@@ -36,11 +37,11 @@ namespace BookStoreApp.Controller
         }
         [HttpPost]
         [Route("api/login")]
-        public IActionResult Login(LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginModel loginModel)
         {
             try
             {
-                int result = this.manager.Login(loginModel);
+                int result = await this.manager.Login(loginModel);
                 if (result == 2)
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = "Login is successful" });
@@ -61,11 +62,11 @@ namespace BookStoreApp.Controller
         }
         [HttpPut]
         [Route("api/resetpassword")]
-        public IActionResult ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
         {
             try
             {
-                int result = this.manager.ResetPassword(resetPasswordModel);
+                int result = await this.manager.ResetPassword(resetPasswordModel);
                 if (result!=0)
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = "Password reset is successful" });

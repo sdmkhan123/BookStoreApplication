@@ -5,6 +5,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStoreRepository.Repository
 {
@@ -24,7 +25,7 @@ namespace BookStoreRepository.Repository
             return Convert.ToBase64String(passwordBytes);
         }
 
-        public int UserSignUp(SignUpModel signUpModel)
+        public async Task<int> UserSignUp(SignUpModel signUpModel)
         {
             try
             {
@@ -40,7 +41,7 @@ namespace BookStoreRepository.Repository
                         sqlCommand.Parameters.AddWithValue("@Password", EncryptPassword(signUpModel.Password));
                         sqlCommand.Parameters.AddWithValue("@MobileNum", signUpModel.MobileNum);
                         con.Open();
-                        int result = sqlCommand.ExecuteNonQuery();
+                        int result = await sqlCommand.ExecuteNonQueryAsync();
                         con.Close();
                         return result;
                     }
@@ -55,7 +56,7 @@ namespace BookStoreRepository.Repository
                 throw new ArgumentNullException(e.Message);
             }
         }
-        public int Login(LoginModel loginModel)
+        public async Task<int> Login(LoginModel loginModel)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace BookStoreRepository.Repository
                         sqlCommand.Parameters.AddWithValue("@Password", EncryptPassword(loginModel.Password));
                         sqlCommand.Parameters.Add("@User", SqlDbType.Int).Direction = ParameterDirection.Output;
                         sqlConnection.Open();
-                        sqlCommand.ExecuteNonQuery();
+                        await sqlCommand.ExecuteNonQueryAsync();
                         int UserValue = (int)sqlCommand.Parameters["@user"].Value;
                         if(UserValue == 2)
                         {
@@ -90,7 +91,7 @@ namespace BookStoreRepository.Repository
                 throw new ArgumentNullException(e.Message);
             }
         }
-        public int ResetPassword(ResetPasswordModel resetPasswordModel)
+        public async Task<int> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             try
             {
@@ -104,7 +105,7 @@ namespace BookStoreRepository.Repository
                         sqlCommand.Parameters.AddWithValue("@EmailId", resetPasswordModel.EmailId);
                         sqlCommand.Parameters.AddWithValue("@NewPassword", EncryptPassword(resetPasswordModel.NewPassword));
                         sqlConnection.Open();
-                        int result = sqlCommand.ExecuteNonQuery();
+                        int result = await sqlCommand.ExecuteNonQueryAsync();
                         return result;
                     }
                 }
