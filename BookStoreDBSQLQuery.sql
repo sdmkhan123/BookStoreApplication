@@ -72,9 +72,12 @@ Create procedure spForResetPassword
 as
 Begin
 	Begin Try
-		Update User_SignUp_Table
-		set Password=@NewPassword
-		where EmailId=@EmailId
+	IF EXISTS(SELECT * FROM User_SignUp_Table WHERE EmailId=@EmailId)
+		Begin
+			Update User_SignUp_Table
+			set Password=@NewPassword
+			where EmailId=@EmailId
+		End
 	End Try
 	BEGIN CATCH
 		Select ERROR_MESSAGE() AS ErrorMessage;
