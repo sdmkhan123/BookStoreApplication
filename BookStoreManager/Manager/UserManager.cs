@@ -13,6 +13,7 @@ namespace BookStoreManager.Manager
         {
             this.repository = repository;
         }
+
         public async Task<int> UserSignUp(SignUpModel signUpModel)
         {
             try
@@ -24,6 +25,7 @@ namespace BookStoreManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
         public async Task<int> Login(LoginModel loginModel)
         {
             try
@@ -35,6 +37,7 @@ namespace BookStoreManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
         public async Task<int> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             try
@@ -42,6 +45,18 @@ namespace BookStoreManager.Manager
                 return await this.repository.ResetPassword(resetPasswordModel);
             }
             catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public int ForgotPassword(string Email)
+        {
+            try
+            {
+                return this.repository.ForgotPassword(Email);
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
