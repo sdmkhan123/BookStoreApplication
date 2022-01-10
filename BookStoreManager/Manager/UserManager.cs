@@ -2,6 +2,7 @@
 using BookStoreModels;
 using BookStoreRepository.Interface;
 using System;
+using System.Threading.Tasks;
 
 namespace BookStoreManager.Manager
 {
@@ -12,35 +13,50 @@ namespace BookStoreManager.Manager
         {
             this.repository = repository;
         }
-        public int UserSignUp(SignUpModel signUpModel)
+
+        public async Task<int> UserSignUp(SignUpModel signUpModel)
         {
             try
             {
-                return this.repository.UserSignUp(signUpModel);
+                return await this.repository.UserSignUp(signUpModel);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public int Login(LoginModel loginModel)
+
+        public async Task<int> Login(LoginModel loginModel)
         {
             try
             {
-                return this.repository.Login(loginModel);
+                return await this.repository.Login(loginModel);
             }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public int ResetPassword(ResetPasswordModel resetPasswordModel)
+
+        public async Task<int> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             try
             {
-                return this.repository.ResetPassword(resetPasswordModel);
+                return await this.repository.ResetPassword(resetPasswordModel);
             }
             catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public int ForgotPassword(string Email)
+        {
+            try
+            {
+                return this.repository.ForgotPassword(Email);
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

@@ -1,11 +1,13 @@
 ﻿using BookStoreModels;
+using System.Threading.Tasks;
 
 namespace BookStoreRepository.Interface
 {
     public interface IUserRepository
     {
-        int UserSignUp(SignUpModel signUpModel);
-        int Login(LoginModel loginModel);
-        int ResetPassword(ResetPasswordModel resetPasswordModel);
+        Task<int> UserSignUp(SignUpModel signUpModel);
+        Task<int> Login(LoginModel loginModel);
+        Task<int> ResetPassword(ResetPasswordModel resetPasswordModel);
+        int ForgotPassword(string Email);
     }
 }
