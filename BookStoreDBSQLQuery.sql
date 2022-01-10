@@ -23,10 +23,14 @@ Create procedure SignUpUsers
 as
 Begin
 BEGIN TRY
+BEGIN TRANSACTION;
 	Insert into User_SignUp_Table Values (@FullName,@EmailId,@Password, @MobileNum)
+COMMIT TRANSACTION;
 END TRY
 BEGIN CATCH
-	Select ERROR_MESSAGE() AS ErrorMessage;
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
 END CATCH
 End
 --===================================================================================
@@ -41,6 +45,7 @@ Create procedure spForLogin
 as
 Begin
 	Begin Try
+	BEGIN TRANSACTION;
 		IF EXISTS(SELECT * FROM User_SignUp_Table WHERE EmailId=@EmailId)
 		BEGIN
 			IF EXISTS(SELECT * FROM User_SignUp_Table WHERE EmailId=@EmailId AND Password=@Password)
@@ -56,9 +61,12 @@ Begin
 		BEGIN
 			SET @User = 0;
 		END
+	COMMIT TRANSACTION;
 	End Try
 	BEGIN CATCH
-	Select ERROR_MESSAGE() AS ErrorMessage;
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 End
 --===================================================================================
@@ -72,14 +80,25 @@ Create procedure spForResetPassword
 as
 Begin
 	Begin Try
+	BEGIN TRANSACTION;
 	IF EXISTS(SELECT * FROM User_SignUp_Table WHERE EmailId=@EmailId)
-		Begin
-			Update User_SignUp_Table
-			set Password=@NewPassword
-			where EmailId=@EmailId
-		End
+	Begin
+		Update User_SignUp_Table
+		set Password=@NewPassword
+		where EmailId=@EmailId
+	End
+	COMMIT TRANSACTION;
 	End Try
-	BEGIN CATCH
-		Select ERROR_MESSAGE() AS ErrorMessage;
-	END CATCH
+	Begin CATCH
+        IF (XACT_STATE()) = -1
+        BEGIN  
+            PRINT  N'The transaction is in an uncommittable state.' + 'Rolling back transaction.'  
+            ROLLBACK TRANSACTION;  
+        END;
+        IF (XACT_STATE()) = 1
+        BEGIN  
+            PRINT N'The transaction is committable.' + 'Committing transaction.'  
+            COMMIT TRANSACTION;
+        END;
+	End CATCH
 End
