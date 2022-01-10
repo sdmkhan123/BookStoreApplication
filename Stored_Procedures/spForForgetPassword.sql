@@ -2,11 +2,7 @@ Use BookStoreDB
 
 CREATE PROC spUserForget
 	@EmailId VARCHAR(50),
-<<<<<<< HEAD
 	@user INT OUTPUT
-=======
-	@user INT = NULL OUTPUT
->>>>>>> UserRegistration
 AS
 BEGIN
 	BEGIN TRY
