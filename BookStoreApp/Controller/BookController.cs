@@ -42,7 +42,7 @@ namespace BookStoreApp.Controller
         }
 
         [HttpPut]
-        [Route("updateBook")]
+        [Route("api/updateBook")]
         public IActionResult UpdateBookDetails([FromBody] BookModel bookModel)
         {
             try
@@ -56,10 +56,34 @@ namespace BookStoreApp.Controller
                 {
                     return this.BadRequest(new { Status = false, Message = "Update book details Unsuccessful", data = result });
                 }
+
             }
             catch (Exception ex)
             {
                 return this.NotFound(new { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/getBookDetails")]
+        public IActionResult RetrieveBookDetails(int bookId)
+        {
+            try
+            {
+                BookModel result = this.manager.RetrieveBookDetails(bookId);
+                if (result != null)
+                {
+                    return this.Ok(new ResponseModel<BookModel>() { Status = true, Message = "Retrieval of book details succssful", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<BookModel>() { Status = false, Message = "Bookid doesnt exists", Data = result });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
     }

@@ -8,5 +8,7 @@ namespace BookStoreRepository.Interface
 
         public int UpdateBookDetails(BookModel bookModel);
 
+        BookModel RetrieveBookDetails(int bookId);
+
     }
 }
