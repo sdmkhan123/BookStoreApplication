@@ -107,3 +107,20 @@ BEGIN
 		SELECT  ERROR_MESSAGE() AS ErrorMessage;
  End catch
 End
+--===================================================================================
+--Creating Stored Procedure for books a Book in Book_Detail_Table
+--===================================================================================
+create PROCEDURE spDeleteBookDetails
+  @BookId int
+AS
+BEGIN
+ Begin try
+     IF(EXISTS(SELECT * FROM Book_Details_Table WHERE BookId=@BookId))
+	 begin
+	   delete from Book_Details_Table WHERE BookId=@BookId;
+   	 end
+ End try
+ Begin catch
+		SELECT  ERROR_MESSAGE() AS ErrorMessage;    
+ End catch
+End
