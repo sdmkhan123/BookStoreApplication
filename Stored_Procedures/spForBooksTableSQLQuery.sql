@@ -15,6 +15,9 @@ Reviewer Int,
 Image VARCHAR(255) NOT NULL,
 BookCount Int
 )
+--===================================================================================
+--Creating Stored Procedure for adding new Book in Book_Detail_Table
+--===================================================================================
 CREATE PROC spAddBook
 	@BookName VARCHAR(255),
 	@AuthorName VARCHAR(255),
@@ -37,4 +40,50 @@ BEGIN
 			Select
 				ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
+End
+--===================================================================================
+--Creating Stored Procedure for Updating Book in Book_Detail_Table
+--===================================================================================
+Create procedure sp_UpdateBooks   
+( 
+	@BookId int,
+    @BookName VARCHAR(255),
+    @AuthorName varchar(255),
+    @DiscountPrice Int,
+	@OriginalPrice  Int,
+	@BookDescription nvarchar(255),
+    @Rating float ,
+    @Reviewer int  ,
+    @Image varchar(255),
+	@BookCount int
+)
+as
+Begin 
+	Begin try   
+		BEGIN TRANSACTION;
+		IF Exists(select * from Book_Details_Table where BookId = @BookId) 
+		begin
+			update Book_Details_Table
+			set 
+				BookName= @BookName ,
+				AuthorName=@AuthorName,
+				DiscountPrice=@DiscountPrice,
+				OriginalPrice=@OriginalPrice,
+				BookDescription=@BookDescription,
+				Rating=@Rating,
+				Reviewer=@Reviewer,
+				Image=@Image,
+				BookCount=@BookCount
+			where BookId = @BookId;
+		end
+		else
+		begin
+			Select 0;
+		end
+		COMMIT TRANSACTION; 
+	End try
+	Begin catch
+		SELECT  ERROR_MESSAGE() AS ErrorMessage;  
+		ROLLBACK TRANSACTION;  
+	End catch  
 End
