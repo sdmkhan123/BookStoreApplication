@@ -8,24 +8,23 @@ namespace BookStoreRepository.Repository
 {
     public class BookRepository : IBookRepository
     {
-        public IConfiguration Configuration { get; }
+        public IConfiguration configuration { get; }
+        public string connectionString { get; set; } = "BookStoreDbConnectionString";
         public BookRepository(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            this.configuration = configuration;
         }
-        SqlConnection sqlConnection;
 
         public int AddBook(BookModel bookModel)
         {
-            sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDB"));
             try
             {
-                using (sqlConnection)
+                string ConnectionStrings = configuration.GetConnectionString(connectionString);
+                using (SqlConnection sqlConnection = new SqlConnection(ConnectionStrings))
                 {
-                    string storeprocedure = "Sp_AddBooks";
+                    string storeprocedure = "spAddBook";
                     SqlCommand sqlCommand = new SqlCommand(storeprocedure, sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
                     sqlCommand.Parameters.AddWithValue("@BookName", bookModel.BookName);
                     sqlCommand.Parameters.AddWithValue("@AuthorName", bookModel.AuthorName);
                     sqlCommand.Parameters.AddWithValue("@DiscountPrice", bookModel.DiscountPrice);
@@ -37,16 +36,13 @@ namespace BookStoreRepository.Repository
                     sqlCommand.Parameters.AddWithValue("@BookCount", bookModel.BookCount);
                     sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
+                    sqlConnection.Close();
                     return result;
                 }
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
-            }
-            finally
-            {
-                sqlConnection.Close();
             }
         }
     }
