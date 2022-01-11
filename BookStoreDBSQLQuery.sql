@@ -93,7 +93,7 @@ Begin
         IF (XACT_STATE()) = -1
         BEGIN  
             PRINT  N'The transaction is in an uncommittable state.' + 'Rolling back transaction.'  
-            ROLLBACK TRANSACTION;  
+            ROLLBACK TRANSACTION;
         END;
         IF (XACT_STATE()) = 1
         BEGIN  
