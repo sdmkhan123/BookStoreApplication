@@ -10,5 +10,7 @@ namespace BookStoreRepository.Interface
 
         BookModel RetrieveBookDetails(int bookId);
 
+        int DeleteBook(int bookId);
+
     }
 }
