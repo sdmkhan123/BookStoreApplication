@@ -1,5 +1,7 @@
 Use BookStoreDB
 
+--************************Implementing CURD Operations************************
+
 --===================================================================================
 --Creating Table of Cart Details
 --===================================================================================
@@ -80,6 +82,27 @@ BEGIN
 	FROM Cart_Details_Table
 	Inner JOIN Book_Details_Table ON Cart_Details_Table.BookId = Book_Details_Table.BookId
 	WHERE Cart_Details_Table.UserId = @UserId
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
+--===================================================================================
+--4.Creating Stored Procedure for Delelting a CartBooDetail from Cart_Details_Table
+--===================================================================================
+CREATE PROCEDURE spDeleteCartDetails
+	@CartID INT
+AS
+BEGIN
+	Begin Try
+	Begin Transaction
+	IF EXISTS(SELECT * FROM Cart_Details_Table WHERE CartID = @CartID)
+	BEGIN
+		DELETE FROM Cart_Details_Table WHERE CartID = @CartID
+	END
 	COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
