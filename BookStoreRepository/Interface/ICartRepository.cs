@@ -10,5 +10,7 @@ namespace BookStoreRepository.Interface
         int UpdateCartQuantity(int cartId, int quantity);
 
         List<CartModel> RetrieveCartDetails(int userId);
+
+        int DeleteCart(int cartId);
     }
 }

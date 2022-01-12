@@ -59,8 +59,10 @@ namespace BookStoreApp.Controller
                 return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
+
         [HttpGet]
         [Route("api/getCartDetails")]
+
         public IActionResult RetrieveCartDetails(int userId)
         {
             try
@@ -80,5 +82,29 @@ namespace BookStoreApp.Controller
                 return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
+
+
+/*        [HttpDelete]
+        [Route("api/deleteBook")]
+
+        public IActionResult DeleteCart(int cartId)
+        {
+            try
+            {
+                int result = this.cartManager.DeleteCart(cartId);
+                if (result == 1)
+                {
+                    return this.Ok(new { Status = true, Message = "Cart details deleted successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Cartid does not exists" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }*/
     }
 }

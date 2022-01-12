@@ -48,5 +48,17 @@ namespace BookStoreManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        public int DeleteCart(int cartId)
+        {
+            try
+            {
+                return this.cartRepository.DeleteCart(cartId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -116,6 +116,31 @@ namespace BookStoreRepository.Repository
                 sqlConnection.Close();
             }
         }
+
+        public int DeleteCart(int cartId)
+        {
+            SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
+            try
+            {
+                using (sqlConnection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("spDeleteCartDetails", sqlConnection);
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@CartID", cartId);
+                    sqlConnection.Open();
+                    int result = sqlCommand.ExecuteNonQuery();
+                    return result;
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }
 
