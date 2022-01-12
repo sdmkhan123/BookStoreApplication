@@ -108,5 +108,26 @@ namespace BookStoreApp.Controller
                 return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
+        [HttpGet]
+        [Route("api/getAllBooks")]
+        public IActionResult GetAllBooks()
+        {
+            try
+            {
+                var result = this.manager.GetAllBooks();
+                if (result != null)
+                {
+                    return this.Ok(new ResponseModel<object>() { Status = true, Message = "Retrieval all book details succssful", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "No book exists" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
     }
 }

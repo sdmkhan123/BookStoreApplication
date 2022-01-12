@@ -2,6 +2,7 @@
 using BookStoreModels;
 using BookStoreRepository.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace BookStoreManager.Manager
 {
@@ -53,6 +54,17 @@ namespace BookStoreManager.Manager
             try
             {
                 return this.bookRepository.DeleteBook(bookId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public List<BookModel> GetAllBooks()
+        {
+            try
+            {
+                return this.bookRepository.GetAllBooks();
             }
             catch (Exception e)
             {
