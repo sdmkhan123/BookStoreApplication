@@ -38,5 +38,26 @@ namespace BookStoreApp.Controller
                 return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
+        [HttpPut]
+        [Route("api/updateBookQuantity")]
+        public IActionResult UpdateCartQuantity(int cartId, int quantity)
+        {
+            try
+            {
+                int result = this.cartManager.UpdateCartQuantity(cartId, quantity);
+                if (result==1)
+                {
+                    return this.Ok(new { Status = true, Message = "Quantity Updated Successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Quantity Updated Successfully", Data = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
     }
 }

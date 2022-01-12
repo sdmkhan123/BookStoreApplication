@@ -21,9 +21,20 @@ namespace BookStoreManager.Manager
             {
                 return this.cartRepository.AddToCart(cartModel);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+        public int UpdateCartQuantity(int cartId, int quantity)
+        {
+            try
+            {
+                return this.cartRepository.UpdateCartQuantity(cartId, quantity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
