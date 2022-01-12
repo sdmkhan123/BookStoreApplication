@@ -11,7 +11,7 @@ Create Table Cart_Details_Table
 	OrderQuantity int default 1
 );
 --===================================================================================
---Creating Stored Procedure for adding new Book in Cart_Details_Table
+--1.Creating Stored Procedure for adding new Book in Cart_Details_Table
 --===================================================================================
 Create Procedure spAddingCart
 (
@@ -36,7 +36,7 @@ BEGIN
 	END CATCH
 END
 --===================================================================================
---Creating Stored Procedure for Update Quantity of a book in Cart_Details_Table
+--2.Creating Stored Procedure for Update Quantity of a book in Cart_Details_Table
 --===================================================================================
 CREATE PROC spUpdateQuantity
 	@CartID int,
@@ -51,6 +51,35 @@ BEGIN
 			SET OrderQuantity = @OrderQuantity
 			WHERE CartID = @CartID;
 		END
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
+--===================================================================================
+--3.Creating Stored Procedure for retrievving all book from Cart_Details_Table
+--===================================================================================
+CREATE PROCEDURE spGetCartDetails
+	@UserId INT
+AS
+BEGIN
+	Begin Try
+	Begin Transaction
+	SELECT
+		Cart_Details_Table.CartID,
+		Cart_Details_Table.UserId,
+		Cart_Details_Table.BookId,
+		Cart_Details_Table.OrderQuantity,
+		Book_Details_Table.BookName,
+		Book_Details_Table.AuthorName,
+		Book_Details_Table.DiscountPrice,
+		Book_Details_Table.OriginalPrice
+	FROM Cart_Details_Table
+	Inner JOIN Book_Details_Table ON Cart_Details_Table.BookId = Book_Details_Table.BookId
+	WHERE Cart_Details_Table.UserId = @UserId
 	COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
