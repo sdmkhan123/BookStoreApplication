@@ -88,39 +88,62 @@ Begin
 	End catch  
 End
 --===================================================================================
---Creating Stored Procedure for books a Book in Book_Detail_Table
+--Creating Stored Procedure for Retrieve a Book in Book_Detail_Table
 --===================================================================================
 create Procedure spRetieveBookDetails
 (
 	@BookId int
 )
 
-AS
-BEGIN
- Begin try
-     IF(EXISTS(SELECT * FROM Book_Details_Table WHERE BookId=@BookId))
-	 begin
-	   SELECT * FROM Book_Details_Table WHERE BookId=@BookId;
-   	 end
- End try
- Begin catch
-		SELECT  ERROR_MESSAGE() AS ErrorMessage;
- End catch
+as
+Begin 
+	Begin try   
+		BEGIN TRANSACTION;
+		IF(EXISTS(SELECT * FROM Book_Details_Table WHERE BookId=@BookId))
+		begin
+			SELECT * FROM Book_Details_Table WHERE BookId=@BookId;
+		end
+		COMMIT TRANSACTION; 
+	End try
+	Begin catch
+		SELECT  ERROR_MESSAGE() AS ErrorMessage;  
+		ROLLBACK TRANSACTION;  
+	End catch  
 End
 --===================================================================================
 --Creating Stored Procedure for books a Book in Book_Detail_Table
 --===================================================================================
 create PROCEDURE spDeleteBookDetails
   @BookId int
-AS
-BEGIN
- Begin try
-     IF(EXISTS(SELECT * FROM Book_Details_Table WHERE BookId=@BookId))
-	 begin
-	   delete from Book_Details_Table WHERE BookId=@BookId;
-   	 end
- End try
- Begin catch
-		SELECT  ERROR_MESSAGE() AS ErrorMessage;    
- End catch
+
+as
+Begin 
+	Begin try   
+		BEGIN TRANSACTION;
+			IF(EXISTS(SELECT * FROM Book_Details_Table WHERE BookId=@BookId))
+			begin
+				delete from Book_Details_Table WHERE BookId=@BookId;
+			end
+		COMMIT TRANSACTION; 
+	End try
+	Begin catch
+		SELECT  ERROR_MESSAGE() AS ErrorMessage;  
+		ROLLBACK TRANSACTION;  
+	End catch  
+End
+--===================================================================================
+--Creating Stored Procedure for Retrieve All Book from Book_Detail_Table
+--===================================================================================
+create procedure spGetAllBook
+as
+Begin 
+	Begin try   
+		BEGIN TRANSACTION;
+			select * from Book_Details_Table
+		COMMIT TRANSACTION; 
+	End try
+	Begin catch
+		SELECT  ERROR_MESSAGE() AS ErrorMessage;  
+		ROLLBACK TRANSACTION;  
+	End catch  
 End
