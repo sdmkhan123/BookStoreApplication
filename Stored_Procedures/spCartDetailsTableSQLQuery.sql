@@ -16,21 +16,16 @@ Create Table Cart_Details_Table
 Create Procedure spAddingCart
 (
 	@UserId int,
-	@BookId int,
-	@OrderQuantity int
+	@BookId int
 )
 AS
 BEGIN
 	Begin Try
 	Begin Transaction
-		IF (EXISTS(SELECT * FROM Book_Details_Table WHERE BookId=@BookId))		
+	IF (EXISTS(SELECT * FROM Book_Details_Table WHERE BookId=@BookId))		
 		begin
-			INSERT INTO Cart_Details_Table VALUES
-			(@UserId,@BookId,@OrderQuantity)
-		end
-		else
-		begin 
-			select 0
+			INSERT INTO Cart_Details_Table( UserId,BookId)
+			VALUES (@UserId,@BookId)
 		end
 	COMMIT TRANSACTION;
 	END TRY
@@ -38,5 +33,29 @@ BEGIN
 			Rollback TRANSACTION;
 			Select
 				ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
+--===================================================================================
+--Creating Stored Procedure for Update Quantity of a book in Cart_Details_Table
+--===================================================================================
+CREATE PROC spUpdateQuantity
+	@CartID int,
+	@OrderQuantity int
+AS
+BEGIN
+	Begin Try
+	Begin Transaction
+	IF (EXISTS(SELECT * FROM Cart_Details_Table WHERE CartID = @CartID))
+		BEGIN
+			UPDATE Cart_Details_Table
+			SET OrderQuantity = @OrderQuantity
+			WHERE CartID = @CartID;
+		END
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 END
