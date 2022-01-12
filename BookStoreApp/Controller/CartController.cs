@@ -51,12 +51,33 @@ namespace BookStoreApp.Controller
                 }
                 else
                 {
-                    return this.BadRequest(new { Status = false, Message = "Quantity Updated Successfully", Data = result });
+                    return this.BadRequest(new { Status = false, Message = "Update is Unsuccessful", Data = result });
                 }
             }
             catch (Exception ex)
             {
-                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+                return this.NotFound(new { Status = false, Message = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("api/getCartDetails")]
+        public IActionResult RetrieveCartDetails(int userId)
+        {
+            try
+            {
+                List<CartModel> result = this.cartManager.RetrieveCartDetails(userId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Data retrieved successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Get cart details is unsuccessful", Data = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
     }

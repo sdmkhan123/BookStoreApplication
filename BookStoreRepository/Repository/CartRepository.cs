@@ -28,7 +28,6 @@ namespace BookStoreRepository.Repository
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("@BookId", cartModel.BookId);
                     sqlCommand.Parameters.AddWithValue("@UserId", cartModel.UserId);
-                    sqlCommand.Parameters.AddWithValue("@OrderQuantity", cartModel.OrderQuantity);
                     sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
                     return result;
@@ -60,6 +59,55 @@ namespace BookStoreRepository.Repository
                 }
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
+        public List<CartModel> RetrieveCartDetails(int userId)
+        {
+            SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
+            try
+            {
+                using (sqlConnection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("spGetCartDetails", sqlConnection);
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.AddWithValue("@UserId", userId);
+                    sqlConnection.Open();
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                    List<CartModel> cartList = new List<CartModel>();
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            CartModel cartModel = new CartModel();
+                            BookModel bookModel = new BookModel();
+                            bookModel.BookName = sqlDataReader["BookName"].ToString();
+                            bookModel.AuthorName = sqlDataReader["AuthorName"].ToString();
+                            bookModel.DiscountPrice = Convert.ToInt32(sqlDataReader["DiscountPrice"]);
+                            bookModel.OriginalPrice = Convert.ToInt32(sqlDataReader["OriginalPrice"]);
+                            cartModel.CartID = Convert.ToInt32(sqlDataReader["CartID"]);
+                            cartModel.UserId = Convert.ToInt32(sqlDataReader["UserId"]);
+                            cartModel.BookId = Convert.ToInt32(sqlDataReader["BookId"]);
+                            cartModel.OrderQuantity = Convert.ToInt32(sqlDataReader["OrderQuantity"]);
+                            cartModel.bookModel = bookModel;
+                            cartList.Add(cartModel);
+                        }
+                        return cartList;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (ArgumentNullException ex)
             {
                 throw new Exception(ex.Message);
             }
