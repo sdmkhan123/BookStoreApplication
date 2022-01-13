@@ -84,8 +84,8 @@ namespace BookStoreApp.Controller
         }
 
 
-/*        [HttpDelete]
-        [Route("api/deleteBook")]
+        [HttpDelete]
+        [Route("deleteBook")]
 
         public IActionResult DeleteCart(int cartId)
         {
@@ -98,13 +98,13 @@ namespace BookStoreApp.Controller
                 }
                 else
                 {
-                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Cartid does not exists" });
+                    return this.BadRequest(new { Status = false, Message = "Cartid does not exists", Data = result });
                 }
             }
             catch (Exception ex)
             {
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
-        }*/
+        }
     }
 }
