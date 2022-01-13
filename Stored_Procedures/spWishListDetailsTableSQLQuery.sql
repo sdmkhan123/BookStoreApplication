@@ -33,3 +33,21 @@ BEGIN
 				ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 END
+--===================================================================================
+--2.Creating Stored Procedure for Delelting a wishlist from WishlistTable
+--===================================================================================
+CREATE PROCEDURE spDeleteWishlist
+	@WishlistId INT
+AS
+BEGIN
+	Begin Try
+	Begin Transaction
+		DELETE FROM WishlistTable WHERE WishlistId = @WishlistId
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+			Rollback TRANSACTION;
+			Select
+				ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
