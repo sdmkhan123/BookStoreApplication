@@ -51,3 +51,29 @@ BEGIN
 				ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 END
+--===================================================================================
+--To Retreive All Books
+--===================================================================================
+Create procedure SpGetBooksFromWishList
+(
+    @UserId varchar(50)        
+)
+AS
+BEGIN
+	Begin Try
+	Begin Transaction                    
+		Select Book_Details_Table.BookId, Book_Details_Table.BookName, Book_Details_Table.AuthorName, 
+		Book_Details_Table.BookDescription, Book_Details_Table.DiscountPrice, Book_Details_Table.OriginalPrice,
+		Book_Details_Table.Rating, Book_Details_Table.BookCount, Book_Details_Table.Image, WishlistTable.WishlistId,
+		WishlistTable.UserId,WishlistTable.BookId
+		From Book_Details_Table
+		Inner Join WishlistTable On WishlistTable.BookId=Book_Details_Table.BookId 
+		Where WishlistTable.UserId=@UserId
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+			Rollback TRANSACTION;
+			Select
+				ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
