@@ -1,4 +1,5 @@
 ﻿using BookStoreModels;
+using System.Collections.Generic;
 
 namespace BookStoreRepository.Interface
 {
@@ -7,5 +8,7 @@ namespace BookStoreRepository.Interface
         int AddWishlist(WishlistModel wishlistModel);
 
         int DeleteBookFromWishlist(int wishlistId);
+
+        List<WishlistModel> GetWishList(int userId);
     }
 }

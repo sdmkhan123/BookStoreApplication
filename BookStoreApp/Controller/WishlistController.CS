@@ -49,7 +49,6 @@ namespace BookStoreApp.Controller
                 int result = this.wishlistManager.DeleteBookFromWishlist(wishlistId);
                 if (result == 1)
                 {
-
                     return this.Ok(new { Status = true, Message = "Wishlist deleted successfully", Data = result });
                 }
                 else
@@ -60,6 +59,28 @@ namespace BookStoreApp.Controller
             catch (Exception ex)
             {
                 return this.NotFound(new { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/getwishlist")]
+        public IActionResult GetWishList(int userId)
+        {
+            var result = this.wishlistManager.GetWishList(userId);
+            try
+            {
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Wish List successfully retrived", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "No WishList available", Data = result });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.NotFound(new { Status = false, Message = e.Message });
             }
         }
     }

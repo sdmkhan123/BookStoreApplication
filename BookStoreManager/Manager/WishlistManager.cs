@@ -2,6 +2,7 @@
 using BookStoreModels;
 using BookStoreRepository.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace BookStoreManager.Manager
 {
@@ -34,6 +35,18 @@ namespace BookStoreManager.Manager
             catch (Exception e)
             {
                 throw new Exception(e.Message);
+            }
+        }
+
+        public List<WishlistModel> GetWishList(int userId)
+        {
+            try
+            {
+                return this.wishlistRepository.GetWishList(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
