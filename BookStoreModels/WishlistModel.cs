@@ -13,7 +13,5 @@ namespace BookStoreModels
 
         [Required]
         public int BookId { get; set; }
-
-        public BookModel Book { get; set; }
     }
 }
