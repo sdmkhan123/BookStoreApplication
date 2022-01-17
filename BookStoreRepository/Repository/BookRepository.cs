@@ -20,23 +20,20 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
-                    SqlCommand sqlCommand = new SqlCommand("spAddBook", sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@BookName", bookModel.BookName);
-                    sqlCommand.Parameters.AddWithValue("@AuthorName", bookModel.AuthorName);
-                    sqlCommand.Parameters.AddWithValue("@DiscountPrice", bookModel.DiscountPrice);
-                    sqlCommand.Parameters.AddWithValue("@OriginalPrice", bookModel.OriginalPrice);
-                    sqlCommand.Parameters.AddWithValue("@BookDescription", bookModel.BookDescription);
-                    sqlCommand.Parameters.AddWithValue("@Rating", bookModel.Rating);
-                    sqlCommand.Parameters.AddWithValue("@Reviewer", bookModel.Reviewer);
-                    sqlCommand.Parameters.AddWithValue("@Image", bookModel.Image);
-                    sqlCommand.Parameters.AddWithValue("@BookCount", bookModel.BookCount);
-                    sqlConnection.Open();
-                    int result = sqlCommand.ExecuteNonQuery();
-                    return result;
-                }
+                SqlCommand sqlCommand = new SqlCommand("spAddBook", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@BookName", bookModel.BookName);
+                sqlCommand.Parameters.AddWithValue("@AuthorName", bookModel.AuthorName);
+                sqlCommand.Parameters.AddWithValue("@DiscountPrice", bookModel.DiscountPrice);
+                sqlCommand.Parameters.AddWithValue("@OriginalPrice", bookModel.OriginalPrice);
+                sqlCommand.Parameters.AddWithValue("@BookDescription", bookModel.BookDescription);
+                sqlCommand.Parameters.AddWithValue("@Rating", bookModel.Rating);
+                sqlCommand.Parameters.AddWithValue("@Reviewer", bookModel.Reviewer);
+                sqlCommand.Parameters.AddWithValue("@Image", bookModel.Image);
+                sqlCommand.Parameters.AddWithValue("@BookCount", bookModel.BookCount);
+                sqlConnection.Open();
+                int result = sqlCommand.ExecuteNonQuery();
+                return result;
             }
             catch (Exception e)
             {
@@ -53,25 +50,22 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
-                    SqlCommand sqlCommand = new SqlCommand("sp_UpdateBooks", sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlCommand sqlCommand = new SqlCommand("sp_UpdateBooks", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    sqlCommand.Parameters.AddWithValue("@BookId", bookModel.BookId);
-                    sqlCommand.Parameters.AddWithValue("@BookName", bookModel.BookName);
-                    sqlCommand.Parameters.AddWithValue("@AuthorName", bookModel.AuthorName);
-                    sqlCommand.Parameters.AddWithValue("@DiscountPrice", bookModel.DiscountPrice);
-                    sqlCommand.Parameters.AddWithValue("@OriginalPrice", bookModel.OriginalPrice);
-                    sqlCommand.Parameters.AddWithValue("@BookDescription", bookModel.BookDescription);
-                    sqlCommand.Parameters.AddWithValue("@Rating", bookModel.Rating);
-                    sqlCommand.Parameters.AddWithValue("@Reviewer", bookModel.Reviewer);
-                    sqlCommand.Parameters.AddWithValue("@Image", bookModel.Image);
-                    sqlCommand.Parameters.AddWithValue("@BookCount", bookModel.BookCount);
-                    sqlConnection.Open();
-                    int result = sqlCommand.ExecuteNonQuery();
-                    return result;
-                }
+                sqlCommand.Parameters.AddWithValue("@BookId", bookModel.BookId);
+                sqlCommand.Parameters.AddWithValue("@BookName", bookModel.BookName);
+                sqlCommand.Parameters.AddWithValue("@AuthorName", bookModel.AuthorName);
+                sqlCommand.Parameters.AddWithValue("@DiscountPrice", bookModel.DiscountPrice);
+                sqlCommand.Parameters.AddWithValue("@OriginalPrice", bookModel.OriginalPrice);
+                sqlCommand.Parameters.AddWithValue("@BookDescription", bookModel.BookDescription);
+                sqlCommand.Parameters.AddWithValue("@Rating", bookModel.Rating);
+                sqlCommand.Parameters.AddWithValue("@Reviewer", bookModel.Reviewer);
+                sqlCommand.Parameters.AddWithValue("@Image", bookModel.Image);
+                sqlCommand.Parameters.AddWithValue("@BookCount", bookModel.BookCount);
+                sqlConnection.Open();
+                int result = sqlCommand.ExecuteNonQuery();
+                return result;
             }
             catch (ArgumentNullException ex)
             {
@@ -88,37 +82,34 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
+                SqlCommand sqlCommand = new SqlCommand("spRetieveBookDetails", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@BookId", bookId);
+
+                sqlConnection.Open();
+                BookModel bookModel = new BookModel();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                if (sqlDataReader.HasRows)
                 {
-                    SqlCommand sqlCommand = new SqlCommand("spRetieveBookDetails", sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@BookId", bookId);
-
-                    sqlConnection.Open();
-                    BookModel bookModel = new BookModel();
-                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-
-                    if (sqlDataReader.HasRows)
+                    while (sqlDataReader.Read())
                     {
-                        while (sqlDataReader.Read())
-                        {
-                            bookModel.BookId = Convert.ToInt32(sqlDataReader["BookId"]);
-                            bookModel.BookName = sqlDataReader["BookName"].ToString();
-                            bookModel.AuthorName = sqlDataReader["AuthorName"].ToString();
-                            bookModel.DiscountPrice = Convert.ToInt32(sqlDataReader["DiscountPrice"]);
-                            bookModel.OriginalPrice = Convert.ToInt32(sqlDataReader["OriginalPrice"]);
-                            bookModel.BookDescription = sqlDataReader["BookDescription"].ToString();
-                            bookModel.Rating = Convert.ToInt32(sqlDataReader["Rating"]);
-                            bookModel.Reviewer = Convert.ToInt32(sqlDataReader["Reviewer"]);
-                            bookModel.Image = sqlDataReader["Image"].ToString();
-                            bookModel.BookCount = Convert.ToInt32(sqlDataReader["BookCount"]);
-                        }
-                        return bookModel;
+                        bookModel.BookId = Convert.ToInt32(sqlDataReader["BookId"]);
+                        bookModel.BookName = sqlDataReader["BookName"].ToString();
+                        bookModel.AuthorName = sqlDataReader["AuthorName"].ToString();
+                        bookModel.DiscountPrice = Convert.ToInt32(sqlDataReader["DiscountPrice"]);
+                        bookModel.OriginalPrice = Convert.ToInt32(sqlDataReader["OriginalPrice"]);
+                        bookModel.BookDescription = sqlDataReader["BookDescription"].ToString();
+                        bookModel.Rating = Convert.ToInt32(sqlDataReader["Rating"]);
+                        bookModel.Reviewer = Convert.ToInt32(sqlDataReader["Reviewer"]);
+                        bookModel.Image = sqlDataReader["Image"].ToString();
+                        bookModel.BookCount = Convert.ToInt32(sqlDataReader["BookCount"]);
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return bookModel;
+                }
+                else
+                {
+                    return null;
                 }
             }
             catch (ArgumentNullException ex)
@@ -136,16 +127,13 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
-                    SqlCommand sqlCommand = new SqlCommand("spDeleteBookDetails", sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@BookId", bookId);
+                SqlCommand sqlCommand = new SqlCommand("spDeleteBookDetails", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@BookId", bookId);
 
-                    sqlConnection.Open();
-                    int result = sqlCommand.ExecuteNonQuery();
-                    return result;
-                }
+                sqlConnection.Open();
+                int result = sqlCommand.ExecuteNonQuery();
+                return result;
             }
             catch (ArgumentNullException ex)
             {
@@ -161,37 +149,34 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
+                string storeprocedure = "spGetAllBook";
+                SqlCommand sqlCommand = new SqlCommand(storeprocedure, sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlConnection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                if (sqlDataReader.HasRows)
                 {
-                    string storeprocedure = "spGetAllBook";
-                    SqlCommand sqlCommand = new SqlCommand(storeprocedure, sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlConnection.Open();
-                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                    if (sqlDataReader.HasRows)
+                    List<BookModel> allBookList = new List<BookModel>();
+                    while (sqlDataReader.Read())
                     {
-                        List<BookModel> allBookList = new List<BookModel>();
-                        while (sqlDataReader.Read())
-                        {
-                            BookModel bookModel = new BookModel();
-                            bookModel.BookId = Convert.ToInt32(sqlDataReader["BookId"]);
-                            bookModel.BookName = sqlDataReader["BookName"].ToString();
-                            bookModel.AuthorName = sqlDataReader["AuthorName"].ToString();
-                            bookModel.DiscountPrice = Convert.ToInt32(sqlDataReader["DiscountPrice"]);
-                            bookModel.OriginalPrice = Convert.ToInt32(sqlDataReader["OriginalPrice"]);
-                            bookModel.BookDescription = sqlDataReader["BookDescription"].ToString();
-                            bookModel.Rating = Convert.ToInt32(sqlDataReader["Rating"]);
-                            bookModel.Reviewer = Convert.ToInt32(sqlDataReader["Reviewer"]);
-                            bookModel.Image = sqlDataReader["Image"].ToString();
-                            bookModel.BookCount = Convert.ToInt32(sqlDataReader["BookCount"]);
-                            allBookList.Add(bookModel);
-                        }
-                        return allBookList;
+                        BookModel bookModel = new BookModel();
+                        bookModel.BookId = Convert.ToInt32(sqlDataReader["BookId"]);
+                        bookModel.BookName = sqlDataReader["BookName"].ToString();
+                        bookModel.AuthorName = sqlDataReader["AuthorName"].ToString();
+                        bookModel.DiscountPrice = Convert.ToInt32(sqlDataReader["DiscountPrice"]);
+                        bookModel.OriginalPrice = Convert.ToInt32(sqlDataReader["OriginalPrice"]);
+                        bookModel.BookDescription = sqlDataReader["BookDescription"].ToString();
+                        bookModel.Rating = Convert.ToInt32(sqlDataReader["Rating"]);
+                        bookModel.Reviewer = Convert.ToInt32(sqlDataReader["Reviewer"]);
+                        bookModel.Image = sqlDataReader["Image"].ToString();
+                        bookModel.BookCount = Convert.ToInt32(sqlDataReader["BookCount"]);
+                        allBookList.Add(bookModel);
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return allBookList;
+                }
+                else
+                {
+                    return null;
                 }
 
             }

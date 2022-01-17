@@ -20,8 +20,6 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
                     SqlCommand sqlCommand = new SqlCommand("spCreateWishlist", sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("@BookId", wishlistModel.BookId);
@@ -29,7 +27,6 @@ namespace BookStoreRepository.Repository
                     sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
                     return result;
-                }
             }
             catch (Exception ex)
             {
@@ -45,15 +42,12 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
                     SqlCommand sqlCommand = new SqlCommand("spDeleteWishlist", sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("@WishlistId", wishlistId);
                     sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
                     return result;
-                }
             }
             catch (Exception ex)
             {
@@ -70,8 +64,6 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
                     SqlCommand sqlCommand = new SqlCommand("SpGetBooksFromWishList", sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlConnection.Open();
@@ -105,7 +97,6 @@ namespace BookStoreRepository.Repository
                     {
                         return null;
                     }
-                }
             }
             catch (Exception e)
             {

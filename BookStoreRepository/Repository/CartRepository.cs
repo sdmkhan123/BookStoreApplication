@@ -22,8 +22,6 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
                     SqlCommand sqlCommand = new SqlCommand("spAddingCart", sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("@BookId", cartModel.BookId);
@@ -31,7 +29,6 @@ namespace BookStoreRepository.Repository
                     sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
                     return result;
-                }
             }
             catch (Exception ex)
             {
@@ -47,16 +44,13 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
-                    SqlCommand sqlCommand = new SqlCommand("spUpdateQuantity", sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@CartID", cartId);
-                    sqlCommand.Parameters.AddWithValue("@OrderQuantity", quantity);
-                    sqlConnection.Open();
-                    int result = sqlCommand.ExecuteNonQuery();
-                    return result;
-                }
+                SqlCommand sqlCommand = new SqlCommand("spUpdateQuantity", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CartID", cartId);
+                sqlCommand.Parameters.AddWithValue("@OrderQuantity", quantity);
+                sqlConnection.Open();
+                int result = sqlCommand.ExecuteNonQuery();
+                return result;
             }
             catch (Exception ex)
             {
@@ -73,38 +67,35 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
-                    SqlCommand sqlCommand = new SqlCommand("spGetCartDetails", sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlCommand sqlCommand = new SqlCommand("spGetCartDetails", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    sqlCommand.Parameters.AddWithValue("@UserId", userId);
-                    sqlConnection.Open();
-                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                    List<CartModel> cartList = new List<CartModel>();
-                    if (sqlDataReader.HasRows)
+                sqlCommand.Parameters.AddWithValue("@UserId", userId);
+                sqlConnection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                List<CartModel> cartList = new List<CartModel>();
+                if (sqlDataReader.HasRows)
+                {
+                    while (sqlDataReader.Read())
                     {
-                        while (sqlDataReader.Read())
-                        {
-                            CartModel cartModel = new CartModel();
-                            BookModel bookModel = new BookModel();
-                            bookModel.BookName = sqlDataReader["BookName"].ToString();
-                            bookModel.AuthorName = sqlDataReader["AuthorName"].ToString();
-                            bookModel.DiscountPrice = Convert.ToInt32(sqlDataReader["DiscountPrice"]);
-                            bookModel.OriginalPrice = Convert.ToInt32(sqlDataReader["OriginalPrice"]);
-                            cartModel.CartID = Convert.ToInt32(sqlDataReader["CartID"]);
-                            cartModel.UserId = Convert.ToInt32(sqlDataReader["UserId"]);
-                            cartModel.BookId = Convert.ToInt32(sqlDataReader["BookId"]);
-                            cartModel.OrderQuantity = Convert.ToInt32(sqlDataReader["OrderQuantity"]);
-                            cartModel.bookModel = bookModel;
-                            cartList.Add(cartModel);
-                        }
-                        return cartList;
+                        CartModel cartModel = new CartModel();
+                        BookModel bookModel = new BookModel();
+                        bookModel.BookName = sqlDataReader["BookName"].ToString();
+                        bookModel.AuthorName = sqlDataReader["AuthorName"].ToString();
+                        bookModel.DiscountPrice = Convert.ToInt32(sqlDataReader["DiscountPrice"]);
+                        bookModel.OriginalPrice = Convert.ToInt32(sqlDataReader["OriginalPrice"]);
+                        cartModel.CartID = Convert.ToInt32(sqlDataReader["CartID"]);
+                        cartModel.UserId = Convert.ToInt32(sqlDataReader["UserId"]);
+                        cartModel.BookId = Convert.ToInt32(sqlDataReader["BookId"]);
+                        cartModel.OrderQuantity = Convert.ToInt32(sqlDataReader["OrderQuantity"]);
+                        cartModel.bookModel = bookModel;
+                        cartList.Add(cartModel);
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return cartList;
+                }
+                else
+                {
+                    return null;
                 }
             }
             catch (ArgumentNullException ex)
@@ -122,15 +113,12 @@ namespace BookStoreRepository.Repository
             SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
             try
             {
-                using (sqlConnection)
-                {
-                    SqlCommand sqlCommand = new SqlCommand("spDeleteCartDetails", sqlConnection);
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@CartID", cartId);
-                    sqlConnection.Open();
-                    int result = sqlCommand.ExecuteNonQuery();
-                    return result;
-                }
+                SqlCommand sqlCommand = new SqlCommand("spDeleteCartDetails", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CartID", cartId);
+                sqlConnection.Open();
+                int result = sqlCommand.ExecuteNonQuery();
+                return result;
             }
             catch (ArgumentNullException ex)
             {
