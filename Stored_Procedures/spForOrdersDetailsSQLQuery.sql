@@ -55,3 +55,24 @@ BEGIN
 	ROLLBACK TRANSACTION;  
 	End catch 
 END
+------------get orders------------
+create procedure spGetAllOrders
+	@UserId INT
+AS
+BEGIN
+	Begin Try
+	Begin Transaction
+	select 
+		Book_Details_Table.BookId,Book_Details_Table.BookName,Book_Details_Table.AuthorName,
+		Book_Details_Table.DiscountPrice,Book_Details_Table.OriginalPrice,Book_Details_Table.Image,
+		OrderTable.OrderId,OrderTable.OrderDate
+		FROM Book_Details_Table
+		inner join OrderTable on OrderTable.BookId=Book_Details_Table.BookId where OrderTable.UserId=@UserId
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
