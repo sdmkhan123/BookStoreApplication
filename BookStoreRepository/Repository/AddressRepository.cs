@@ -3,6 +3,7 @@ using BookStoreRepository.Interface;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -41,5 +42,30 @@ namespace BookStoreRepository.Repository
             }
         }
 
+        public int UpdateAddress(AddressModel addressModel)
+        {
+            SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand("spUpdateUserAddress", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@Address", addressModel.Address);
+                sqlCommand.Parameters.AddWithValue("@City", addressModel.City);
+                sqlCommand.Parameters.AddWithValue("@State", addressModel.State);
+                sqlCommand.Parameters.AddWithValue("@Type", addressModel.Type);
+                sqlCommand.Parameters.AddWithValue("@AddressID", addressModel.AddressId);
+                sqlConnection.Open();
+                return sqlCommand.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }
