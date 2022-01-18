@@ -38,6 +38,7 @@ namespace BookStoreApp.Controller
                 return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
+
         [HttpPut]
         [Route("api/updateaddress")]
         public IActionResult UpdateAddress([FromBody] AddressModel addressModel)
@@ -57,6 +58,29 @@ namespace BookStoreApp.Controller
             catch (Exception e)
             {
                 return this.NotFound(new { Status = false, Message = e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetUserAddress")]
+        public IActionResult GetUserAddress(int userId)
+        {
+            var result = this.addressManager.GetUserAddress(userId);
+            try
+            {
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Address successfully retrived", Data = result });
+
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "No address available", Data = result });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = e.Message });
             }
         }
     }
