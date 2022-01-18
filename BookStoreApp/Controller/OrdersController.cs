@@ -35,5 +35,26 @@ namespace BookStoreApp.Controller
                 return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
+        [HttpGet]
+        [Route("GetOrders")]
+        public IActionResult RetrieveOrderDetails(int userId) ////frombody attribute says value read from body of the request
+        {
+            try
+            {
+                var result = this.ordersManager.RetrieveOrderDetails(userId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Retrieved successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Retrieval unsuccessful" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new { Status = false, Message = ex.Message });
+            }
+        }
     }
 }

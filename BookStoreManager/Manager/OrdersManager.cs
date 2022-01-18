@@ -2,6 +2,7 @@
 using BookStoreModels;
 using BookStoreRepository.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace BookStoreManager.Manager
 {
@@ -19,6 +20,17 @@ namespace BookStoreManager.Manager
             try
             {
                 return this.ordersRepository.AddOrder(ordersModel);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<OrdersModel> RetrieveOrderDetails(int userId)
+        {
+            try
+            {
+                return this.ordersRepository.RetrieveOrderDetails(userId);
             }
             catch (Exception ex)
             {
