@@ -73,3 +73,26 @@ BEGIN
 			ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 END
+--===================================================================================
+--3.Creating Stored Procedure for Get All Address in Address_Details_Table
+--===================================================================================
+create procedure GetAddressDetails
+(
+	@UserId int
+)
+AS
+BEGIN
+	Begin Try
+	Begin Transaction
+		IF EXISTS(SELECT * FROM Address_Details_Table WHERE UserId=@UserId)
+		begin
+			SELECT * FROM Address_Details_Table WHERE UserId=@UserId;
+		end
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
