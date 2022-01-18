@@ -40,3 +40,36 @@ BEGIN
 			ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 END
+--===================================================================================
+--2.Creating Stored Procedure for Update Address in Address_Details_Table
+--===================================================================================
+create procedure spUpdateUserAddress
+(
+@AddressID int,
+@Address varchar(255),
+@City varchar(50),
+@State varchar(50),
+@Type varchar(10)
+)
+AS
+BEGIN
+	Begin Try
+	Begin Transaction
+		If exists(Select * from Address_Details_Table where AddressId=@AddressID)
+		begin
+			UPDATE Address_Details_Table
+			SET 
+				Address= @Address,
+				City = @City,
+				State=@State,
+				Type=@Type
+			WHERE AddressId=@AddressID;
+		end
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		Rollback TRANSACTION;
+		Select
+			ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+END
