@@ -48,3 +48,25 @@ Begin
 				ERROR_MESSAGE() AS ErrorMessage;
 	END CATCH
 End
+
+-----------Get feedback-----------
+Create procedure spGetFeedbacks
+	@BookId INT
+AS
+BEGIN
+	Begin try
+	Begin transaction
+		select 
+		FeedbackTable.UserId,FeedbackTable.Comments,FeedbackTable.Ratings,User_SignUp_Table.FullName
+		FROM User_SignUp_Table
+		inner join FeedbackTable
+		on FeedbackTable.UserId=User_SignUp_Table.UserId
+		where BookId=@BookId
+	COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+			Rollback TRANSACTION;
+			Select
+				ERROR_MESSAGE() AS ErrorMessage;
+	END CATCH
+End
