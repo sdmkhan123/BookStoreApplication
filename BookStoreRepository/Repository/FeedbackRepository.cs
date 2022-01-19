@@ -15,8 +15,6 @@ namespace BookStoreRepository.Repository
         {
             this.Configuration = configuration;
         }
-        SqlConnection sqlConnection;
-
         //Adding book to cart api
         public string AddFeedback(FeedbackModel feedbackModel)
         {
@@ -53,6 +51,47 @@ namespace BookStoreRepository.Repository
                 sqlConnection.Close();
             }
         }
+        //Get Feedback
+        public List<FeedbackModel> RetrieveOrderDetails(int bookId)
+        {
+            SqlConnection sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("BookStoreDbConnectionString"));
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand("spGetFeedbacks", sqlConnection);
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
+                sqlCommand.Parameters.AddWithValue("@BookId", bookId);
+                sqlConnection.Open();
+                SqlDataReader sqlData = sqlCommand.ExecuteReader();
+                List<FeedbackModel> feedbackList = new List<FeedbackModel>();
+                if (sqlData.HasRows)
+                {
+                    while (sqlData.Read())
+                    {
+                        FeedbackModel feedbackModel = new FeedbackModel();
+                        SignUpModel signUpModel = new SignUpModel();
+                        signUpModel.FullName = sqlData["FullName"].ToString();
+                        feedbackModel.Comments = sqlData["Comments"].ToString();
+                        feedbackModel.Ratings = Convert.ToInt32(sqlData["Ratings"]);
+                        feedbackModel.UserId = Convert.ToInt32(sqlData["UserId"]);
+                        feedbackModel.User = signUpModel;
+                        feedbackList.Add(feedbackModel);
+                    }
+                    return feedbackList;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }

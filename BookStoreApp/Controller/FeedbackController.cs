@@ -38,5 +38,27 @@ namespace BookStoreApp.Controller
                 return this.NotFound(new { Status = false, Message = ex.Message });
             }
         }
+
+        [HttpGet]
+        [Route("api/getFeedbacks")]
+        public IActionResult RetrieveOrderDetails(int bookId)
+        {
+            try
+            {
+                var result = this.feedbackManager.RetrieveOrderDetails(bookId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Retrival successful", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Retrival unsuccessful" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new { Status = false, Message = ex.Message });
+            }
+        }
     }
 }
